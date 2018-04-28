@@ -1,7 +1,15 @@
-﻿namespace ParkinsonsKinectApplication.Algorithms
+﻿using System;
+using Microsoft.VisualBasic.FileIO;
+using System.Collections.Generic;
+using System.IO;
+
+
+namespace ParkinsonsKinectApplication.Algorithms
 {
-    public class KNearestNeighbour
+    public static class KNearestNeighbour
     {
+
+        
         
     }
 }
