@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.VisualBasic.FileIO;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -65,18 +66,24 @@ namespace ParkinsonsKinectApplication
 
         public List<Iris> readData(String Filename)
         {
-            using (var reader = new StreamReader(Filename))
+            using (var reader = new StreamReader(@Filename))
             {
                 List<Iris> irisList = new List<Iris>();
                 while (!reader.EndOfStream)
                 {
-                    var line = reader.ReadLine();
-                    var values = line.Split(';');
-                    irisList.Add(new Iris(Double.Parse(values[0]),
-                        Double.Parse(values[1]),
-                        Double.Parse(values[2]),
-                        Double.Parse(values[3]),
-                        values[0]));
+                    String line = reader.ReadLine();
+                    String[] values = line.Split(',');
+
+                    String s = values[2];
+                    Decimal ds = Convert.ToDecimal(s);
+
+                    double sl = double.Parse(values[0]);
+                    double sw = double.Parse(values[1]);
+                    double pl = double.Parse(values[2]);
+                    double pw = double.Parse(values[3]);
+                    String ic = values[4];
+
+                    irisList.Add(new Iris(sl, sw, pl, pw, ic));
                 }
                 return irisList;
             }
