@@ -34,10 +34,10 @@ namespace ParkinsonsKinectApplication
             petal_length = pl;
             petal_width = pw;
             iris_class = ic;
-            if (iris_class.Equals("Iris-setosa")) class_num = 0;
-            if (iris_class.Equals("Iris-versicolor")) class_num = 1;
-            if (iris_class.Equals("Iris-virginica")) class_num = 2;
-            else class_num = -1;
+            if (ic.Equals("Iris-setosa")) { class_num = 0;}
+            else if (ic.Contains("Iris-versicolor")) { class_num = 1;}
+            else if (ic.Contains("Iris-virginica")) { class_num = 2;}
+            else { class_num = -1;}
             data = new double[] {sl, sw, pl, pw};
 
         }
