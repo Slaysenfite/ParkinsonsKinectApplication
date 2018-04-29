@@ -2,20 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using Microsoft.VisualBasic.FileIO;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml;
 
 namespace ParkinsonsKinectApplication
 {
@@ -24,41 +13,54 @@ namespace ParkinsonsKinectApplication
     /// </summary>
     public partial class MainWindow : Window
     {
-        enum Classification_Classes { setosa, versicolor, virginica };
+        String[] Classification_Classes = {"setosa", "versicolor", "virginica" };
+        Assembly assembly;
+        StreamReader datasetStreamReader;
 
         private static String output;
+        public const String Filename = "ParkinsonsKinectApplication.Datasets.irisdataset.txt";
 
-        public const String Filename = "irisdata.txt";
         public MainWindow()
         {
             InitializeComponent();
+            try
+            {
+                assembly = Assembly.GetExecutingAssembly();
+                datasetStreamReader = new StreamReader(assembly.GetManifestResourceStream(Filename));
+            }
+            catch
+            {
+                MessageBox.Show("Error accessing resources!");
+            }
 
-            
         }
 
         public void kNNMethod()
         {
-            output = "Begin k-NN classification demo";
+            output = "kNN CLASSIFICATION PROTOTYPE";
 
             List<Iris> trainData = readData(Filename);
 
             int numFeatures = 4;  // predictor variables
             int numClasses = 3;   // 0, 1, 2
 
-            double[] unknown = new double[] { 5.25, 1.75, 5.2, 3.8 };
+            double[] unknown = {6.5, 3.2, 5.1, 2.0 };
 
-            output += "\nClassifying item with predictor values:  5.25 1.75 5.2 3.8";
+            output += "\n\nClassifying item with predictor values: ";
+
+            for (int d = 0; d < unknown.Length; d++)
+                output += unknown[d] + " ";
 
             int k = 1;
             output += "\nK = 1";
 
             int predicted = Classify(unknown, trainData, numClasses, k);
-            output += "\nPredicted class = " + predicted;
+            output += "\nPredicted class = " + Classification_Classes[predicted];
 
             k = 4;
             output += "\n\n With k = 4";
             predicted = Classify(unknown, trainData, numClasses, k);
-            output += "\nPredicted class = " + predicted;
+            output += "\nPredicted class = " + Classification_Classes[predicted];
 
             output += "\nEnd k-NN demo";
 
@@ -67,12 +69,12 @@ namespace ParkinsonsKinectApplication
 
         public List<Iris> readData(String Filename)
         {
-            using (var reader = new StreamReader(@Filename))
+            using (datasetStreamReader)
             {
                 List<Iris> irisList = new List<Iris>();
-                while (!reader.EndOfStream)
+                while (!datasetStreamReader.EndOfStream)
                 {
-                    String line = reader.ReadLine();
+                    String line = datasetStreamReader.ReadLine();
                     String[] values = line.Split(',').ToArray();
 
                     double sl = double.Parse(values[0], CultureInfo.InvariantCulture);
@@ -141,7 +143,6 @@ namespace ParkinsonsKinectApplication
 
             return classWithMostVotes;
         }
-
 
         static double Distance(double[] unknown, double[] data)
         {

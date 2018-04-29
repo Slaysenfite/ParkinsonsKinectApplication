@@ -56,13 +56,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="IndexAndDistance.cs" />
-    <Compile Include="Iris.cs" />
+    <Compile Include="Algorithms\AlgorithmUtilities\IndexAndDistance.cs" />
+    <Compile Include="Attributes\Iris.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Algorithms\Distance.cs" />
     <Compile Include="Algorithms\KNearestNeighbour.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -106,10 +105,7 @@
     <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Datasets\iris.data.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="irisdata.txt" />
+    <EmbeddedResource Include="Datasets\irisdataset.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

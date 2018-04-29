@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParkinsonsKinectApplication"
         mc:Ignorable="d"
-        Title="Early Parkinson's Detection Application" Height="720" Width="1200">
-    <Grid>
+        Title="Early Parkinson's Detection Application" Height="552" Width="864">
+    <Grid HorizontalAlignment="Left" Width="854" Height="502" VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="btnClassify" Grid.ColumnSpan="2" Content="Classify" HorizontalAlignment="Left" Margin="10,652,0,0" VerticalAlignment="Top" Width="75" Click="btnClassify_Click"/>
-        <TextBox x:Name="txtApp" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="611" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="1155"/>
+        <Button x:Name="btnClassify" Grid.ColumnSpan="2" Content="Classify" HorizontalAlignment="Left" Margin="10,476,0,0" VerticalAlignment="Top" Width="75" Click="btnClassify_Click"/>
+        <TextBox x:Name="txtApp" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="461" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="834"/>
     </Grid>
 </Window>
