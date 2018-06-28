@@ -100,7 +100,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CustomDataStructure\" />
     <Folder Include="MathUtilities\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
