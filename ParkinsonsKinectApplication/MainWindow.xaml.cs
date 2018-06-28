@@ -4,8 +4,10 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Linq;
+using Microsoft.Kinect;
 using System.Windows;
 using ParkinsonsKinectApplication.Algorithms;
+using ParkinsonsKinectApplication.KinectModule;
 
 namespace ParkinsonsKinectApplication
 {
@@ -19,6 +21,8 @@ namespace ParkinsonsKinectApplication
         {
             InitializeComponent();
             knn = new KNearestNeighbour();
+            KinectHandler kh = new KinectHandler();
+
         }
 
         
