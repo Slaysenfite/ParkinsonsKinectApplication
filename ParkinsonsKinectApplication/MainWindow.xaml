@@ -5,15 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParkinsonsKinectApplication"
         mc:Ignorable="d"
-        Title="Early Parkinson's Detection Application" Height="613.5" Width="864" Loaded="MainWindow_Loaded">
-    <Grid HorizontalAlignment="Left" Width="854" Height="585" VerticalAlignment="Top" Margin="0,0,0,-2">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <TextBlock Text="Connection ID" Grid.Row="1" Grid.Column="0"/>
-        <TextBlock Text="{Binding ConnectionID}" Grid.Column="1" Margin="10,10,10,35"/>
-        <Button x:Name="btnStartKinect" Grid.ColumnSpan="2" Content="Start Kinect" HorizontalAlignment="Left" Margin="10,555,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btnStopKinect" Grid.ColumnSpan="2" Content="StopKinect" HorizontalAlignment="Left" Margin="90,555,0,0" VerticalAlignment="Top" Width="74"/>
-    </Grid>
+        Title="Early Parkinson's Detection Application" Height="760" Width="1280" Loaded="MainWindow_Loaded">
+    <Viewbox Margin="10,0,2,1">
+        <Grid>
+        <Grid Height="1040" Width="1865">
+            <StackPanel>
+                <Grid Height="1042" VerticalAlignment="Top" Margin="26,0,0,0">
+                    <Button Name ="btnStartKinect" Content="Start Kinect" HorizontalAlignment="Left" Margin="10,964,0,0" VerticalAlignment="Top" Width="253" Height="68" FontSize="36"/>
+                    <Button Name="btnStopKinect" Content="Stop Kinect" HorizontalAlignment="Right" Margin="0,964,1261,10" Width="253" FontSize="36"/>
+
+                </Grid>
+            </StackPanel>
+        </Grid>
+        </Grid>
+    </Viewbox>
+
 </Window>

@@ -28,7 +28,6 @@ namespace ParkinsonsKinectApplication
             this.viewModel = new MainWindowViewModel();
             this.DataContext = this.viewModel;
             kinectHandler = new KinectHandler();
-
         }
 
         private void SetKinectInfo()
@@ -38,11 +37,6 @@ namespace ParkinsonsKinectApplication
                 this.viewModel.ConnectionID = (this.kinectHandler.getSensor().DeviceConnectionId);
                 // Set other property values
             }
-        }
-
-        private void btnClassify_Click(object sender, RoutedEventArgs e)
-        {
-            //txtApp.Text = knn.kNNMethod();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)

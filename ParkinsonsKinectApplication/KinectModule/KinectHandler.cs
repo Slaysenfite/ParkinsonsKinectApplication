@@ -6,12 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using KinectStatusNotifier;
+
+
 
 namespace ParkinsonsKinectApplication.KinectModule
 {
     class KinectHandler
     {
         private readonly KinectSensor sensor;
+        private StatusNotifier notifier;
+
 
         public KinectHandler()
         {
@@ -19,7 +24,8 @@ namespace ParkinsonsKinectApplication.KinectModule
             {
                 sensor = KinectSensor.KinectSensors[0];
                 Console.WriteLine(sensor.UniqueKinectId);
-            } 
+                notifier = new StatusNotifier();
+            }
             else
             {
                 System.Windows.Forms.MessageBox.Show("No Kinect device connected", "Device Connection Error",
@@ -56,6 +62,20 @@ namespace ParkinsonsKinectApplication.KinectModule
             else
             {
                 return false;
+            }
+        }
+
+        void Kinects_StatusChanged(object sender, StatusChangedEventArgs e)
+        {
+            switch (e.Status)
+            {
+                case KinectStatus.Connected:
+                    // Device Connected;
+                    break;
+                case KinectStatus.Disconnected:
+                    // Device DisConnected;
+                    this.stopKinect();
+                    break;
             }
         }
 

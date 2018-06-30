@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="KinectStatusNotifier">
+      <HintPath>..\..\..\..\..\Desktop\2380_Code\2380_03_Code\KinectStatusNotifier\bin\Debug\KinectStatusNotifier.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Kinect, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\University\UJ\Honours\Year Project\KinectStuff\KinectExplorer-WPF\bin\Debug\Microsoft.Kinect.dll</HintPath>
@@ -73,8 +76,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="KinectModule\KinectHandler.cs" />
-    <Compile Include="KinectModule\MainWindowViewModel.cs" />
-    <Compile Include="KinectModule\StatusChanged.cs" />
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
