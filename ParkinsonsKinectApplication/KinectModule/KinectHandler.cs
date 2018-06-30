@@ -19,7 +19,7 @@ namespace ParkinsonsKinectApplication.KinectModule
             {
                 sensor = KinectSensor.KinectSensors[0];
                 Console.WriteLine(sensor.UniqueKinectId);
-            }
+            } 
             else
             {
                 System.Windows.Forms.MessageBox.Show("No Kinect device connected", "Device Connection Error",
@@ -38,6 +38,14 @@ namespace ParkinsonsKinectApplication.KinectModule
             }
         }
 
+        private void stopKinect()
+        {
+            if (this.sensor != null && this.sensor.IsRunning)
+            {
+                this.sensor.Stop();
+            }
+        }
+
         private bool deviceConnectionTest()
         {
             int deviceCount = KinectSensor.KinectSensors.Count;
@@ -49,6 +57,11 @@ namespace ParkinsonsKinectApplication.KinectModule
             {
                 return false;
             }
+        }
+
+        public KinectSensor getSensor()
+        {
+            return this.sensor;
         }
     }
 }

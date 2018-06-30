@@ -73,6 +73,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="KinectModule\KinectHandler.cs" />
+    <Compile Include="KinectModule\MainWindowViewModel.cs" />
+    <Compile Include="KinectModule\StatusChanged.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -17,19 +17,37 @@ namespace ParkinsonsKinectApplication
     public partial class MainWindow : Window
     {
         private KNearestNeighbour knn;
+        private MainWindowViewModel viewModel;
+        private KinectHandler kinectHandler;
+
         public MainWindow()
         {
             InitializeComponent();
             knn = new KNearestNeighbour();
-            KinectHandler kh = new KinectHandler();
+            this.Loaded += this.MainWindow_Loaded;
+            this.viewModel = new MainWindowViewModel();
+            this.DataContext = this.viewModel;
+            kinectHandler = new KinectHandler();
 
         }
 
-        
+        private void SetKinectInfo()
+        {
+            if (this.kinectHandler.getSensor() != null)
+            {
+                this.viewModel.ConnectionID = (this.kinectHandler.getSensor().DeviceConnectionId);
+                // Set other property values
+            }
+        }
 
         private void btnClassify_Click(object sender, RoutedEventArgs e)
         {
-            txtApp.Text = knn.kNNMethod();
+            //txtApp.Text = knn.kNNMethod();
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
