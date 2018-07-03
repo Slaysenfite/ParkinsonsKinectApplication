@@ -76,13 +76,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="KinectModule\KinectHandler.cs" />
-    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="MathUtilities\CovarianceMatrix.cs" />
+    <Compile Include="MathUtilities\JointData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -110,7 +112,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MathUtilities\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
