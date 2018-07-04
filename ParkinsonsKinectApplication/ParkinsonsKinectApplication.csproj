@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="KinectStatusNotifier">
+      <HintPath>..\..\..\..\..\Desktop\2380_Code\2380_03_Code\KinectStatusNotifier\bin\Debug\KinectStatusNotifier.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Kinect, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\University\UJ\Honours\Year Project\KinectStuff\KinectExplorer-WPF\bin\Debug\Microsoft.Kinect.dll</HintPath>
@@ -79,6 +82,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="MathUtilities\CovarianceMatrix.cs" />
+    <Compile Include="MathUtilities\JointData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -106,7 +112,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MathUtilities\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>

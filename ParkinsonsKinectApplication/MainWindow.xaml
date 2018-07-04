@@ -5,13 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParkinsonsKinectApplication"
         mc:Ignorable="d"
-        Title="Early Parkinson's Detection Application" Height="552" Width="864">
-    <Grid HorizontalAlignment="Left" Width="854" Height="502" VerticalAlignment="Top">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Button x:Name="btnClassify" Grid.ColumnSpan="2" Content="Classify" HorizontalAlignment="Left" Margin="10,476,0,0" VerticalAlignment="Top" Width="75" Click="btnClassify_Click"/>
-        <TextBox x:Name="txtApp" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="461" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="834"/>
-    </Grid>
+        Title="Early Parkinson's Detection Application" Height="802" Width="1282" Loaded="MainWindow_Loaded">
+    <Viewbox Margin="0,0,2,1">
+        <Grid Height="1128">
+            <Grid Height="1040" Width="1865">
+                <StackPanel Margin="0,0,0,-29">
+                    <Grid Height="1068" VerticalAlignment="Top">
+                        <Image Name="VideoControl" Margin="0,10,646,0" Height="923" VerticalAlignment="Top"  />
+
+                        <Button Name ="btnStartKinect" Content="Start Kinect" HorizontalAlignment="Right" Margin="0,983,1551,0" VerticalAlignment="Top" Width="253" Height="68" FontSize="36"/>
+                        <Button Name="btnStopKinect" Content="Stop Kinect" Margin="363,983,1249,14" FontSize="36" Click="btnStopKinect_Click"/>
+                        <Grid Margin="0,10,10,109" RenderTransformOrigin="-4.668,0.65" HorizontalAlignment="Right" Width="592">
+                            <Image Height="489" Margin="10,10,10,0" VerticalAlignment="Top" Name="depthImageControl"/>
+                        </Grid>
+
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Viewbox>
+
 </Window>
