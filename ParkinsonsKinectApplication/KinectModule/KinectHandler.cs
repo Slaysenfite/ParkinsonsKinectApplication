@@ -48,10 +48,13 @@ namespace ParkinsonsKinectApplication.KinectModule
             }
         }
 
-        private void stopKinect()
+        public void stopKinect()
         {
             if (this.sensor != null && this.sensor.IsRunning)
             {
+                sensor.ColorStream.Disable();
+                sensor.DepthStream.Disable();
+                sensor.SkeletonStream.Disable();
                 this.sensor.Stop();
             }
         }

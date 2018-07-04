@@ -21,7 +21,10 @@ namespace ParkinsonsKinectApplication
     {
         private KinectHandler kinectHandler;
         private KNearestNeighbour knn;
-        private byte[] pixelData { get; set; }
+        private byte[] pixelDataColor { get; set; }
+        byte[] depth32;
+        short[] pixelDataDepth;
+        DepthImageFrame frame;
 
         public MainWindow()
         {
@@ -32,11 +35,9 @@ namespace ParkinsonsKinectApplication
 
         protected void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            // Check if there kinect connected
             if (KinectSensor.KinectSensors.Count > 0)
             {
                 kinectHandler = new KinectHandler();
-                // start the kinectHandler.getSensor()
                 this.kinectHandler.getSensor().Start();
 
                 this.kinectHandler.getSensor().ColorStream.Disable();
@@ -45,6 +46,12 @@ namespace ParkinsonsKinectApplication
                     this.kinectHandler.getSensor().ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
                     this.kinectHandler.getSensor().ColorFrameReady += new EventHandler<ColorImageFrameReadyEventArgs>(sensor_ColorFrameReady);
                 }
+                this.kinectHandler.getSensor().DepthStream.Disable();
+                if (!this.kinectHandler.getSensor().DepthStream.IsEnabled)
+                {
+                    this.kinectHandler.getSensor().DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+                    kinectHandler.getSensor().DepthFrameReady += new EventHandler<DepthImageFrameReadyEventArgs>(sensor_DepthFrameReady);
+                }
             }
             else
             {
@@ -52,6 +59,24 @@ namespace ParkinsonsKinectApplication
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void sensor_DepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
+        {
+            using (DepthImageFrame depthimageFrame = e.OpenDepthImageFrame())
+            {
+                if (depthimageFrame == null)
+                {
+                    return;
+                }
+                short[] pixelData = new short[depthimageFrame.PixelDataLength];
+                int stride = depthimageFrame.Width * 2;
+                depthimageFrame.CopyPixelDataTo(pixelData);
+                depthImageControl.Source = BitmapSource.Create(depthimageFrame.
+                Width, depthimageFrame.Height, 96, 96, PixelFormats.Gray16, null,
+                pixelData, stride);
+            }
+        }
+
         private void MainWindow_Unloaded(object sender, RoutedEventArgs e)
         {
             kinectHandler.getSensor().Stop();
@@ -69,9 +94,9 @@ namespace ParkinsonsKinectApplication
                 else
                 {
                     // Get the pixel data in byte array
-                    this.pixelData = new byte[imageFrame.PixelDataLength];
+                    this.pixelDataColor = new byte[imageFrame.PixelDataLength];
                     // Copy the pixel data
-                    imageFrame.CopyPixelDataTo(this.pixelData);
+                    imageFrame.CopyPixelDataTo(this.pixelDataColor);
                     // Calculate the stride
                     int stride = imageFrame.Width * imageFrame.BytesPerPixel;
                     // assign the bitmap image source into image control
@@ -82,10 +107,15 @@ namespace ParkinsonsKinectApplication
                     96,
                     PixelFormats.Bgr32,
                     null,
-                    pixelData,
+                    pixelDataColor,
                     stride);
                 }
             }
+        }
+
+        private void btnStopKinect_Click(object sender, RoutedEventArgs e)
+        {
+            this.kinectHandler.stopKinect();
         }
     }
 }

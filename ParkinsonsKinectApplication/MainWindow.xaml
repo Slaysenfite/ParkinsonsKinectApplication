@@ -14,8 +14,10 @@
                         <Image Name="VideoControl" Margin="0,10,646,0" Height="923" VerticalAlignment="Top"  />
 
                         <Button Name ="btnStartKinect" Content="Start Kinect" HorizontalAlignment="Right" Margin="0,983,1551,0" VerticalAlignment="Top" Width="253" Height="68" FontSize="36"/>
-                        <Button Name="btnStopKinect" Content="Stop Kinect" Margin="363,983,1249,14" FontSize="36"/>
-                        <Grid Margin="0,10,10,109" RenderTransformOrigin="-4.668,0.65" HorizontalAlignment="Right" Width="592"/>
+                        <Button Name="btnStopKinect" Content="Stop Kinect" Margin="363,983,1249,14" FontSize="36" Click="btnStopKinect_Click"/>
+                        <Grid Margin="0,10,10,109" RenderTransformOrigin="-4.668,0.65" HorizontalAlignment="Right" Width="592">
+                            <Image Height="489" Margin="10,10,10,0" VerticalAlignment="Top" Name="depthImageControl"/>
+                        </Grid>
 
                     </Grid>
                 </StackPanel>
