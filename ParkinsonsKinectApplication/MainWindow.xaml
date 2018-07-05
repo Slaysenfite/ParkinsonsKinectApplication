@@ -7,16 +7,22 @@
         mc:Ignorable="d"
         Title="Early Parkinson's Detection Application" Height="802" Width="1282" Loaded="MainWindow_Loaded">
     <Viewbox Margin="0,0,2,1">
-        <Grid Height="1128">
+        <Grid Height="1128" Background="#FFF0F0F0">
             <Grid Height="1040" Width="1865">
                 <StackPanel Margin="0,0,0,-29">
                     <Grid Height="1068" VerticalAlignment="Top">
-                        <Image Name="VideoControl" Margin="0,10,646,0" Height="923" VerticalAlignment="Top"  />
-
-                        <Button Name ="btnStartKinect" Content="Start Kinect" HorizontalAlignment="Right" Margin="0,983,1551,0" VerticalAlignment="Top" Width="253" Height="68" FontSize="36"/>
-                        <Button Name="btnStopKinect" Content="Stop Kinect" Margin="363,983,1249,14" FontSize="36" Click="btnStopKinect_Click"/>
-                        <Grid Margin="0,10,10,109" RenderTransformOrigin="-4.668,0.65" HorizontalAlignment="Right" Width="592">
-                            <Image Height="489" Margin="10,10,10,0" VerticalAlignment="Top" Name="depthImageControl"/>
+                        <Image Name="VideoControl" Margin="10,10,607,114"  />
+                        <Grid Margin="1263,0,10,109" RenderTransformOrigin="-4.668,0.65">
+                            <Image Name="depthImageControl" Margin="0,0,0,460"/>
+                            <Canvas Name="skeletonCanvas" Margin="0,504,0,10" Background="LightGray"/>
+                        </Grid>
+                        <Grid HorizontalAlignment="Left" Height="109" Margin="10,959,0,0" VerticalAlignment="Top" Width="1845" Background="#FFF3F3F3">
+                            <Button Content="Button" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top" Width="75"/>
+                            <GroupBox Header="Tracked Skeleton" HorizontalAlignment="Left" Margin="1259,10,0,10" Width="576" Name="groupBox1">
+                                <Grid>
+                                    <ProgressBar Margin="6,28,10,21" Name="progressBar1" Orientation="Horizontal" Value="0" Maximum="20" Minimum="0" />
+                                </Grid>
+                            </GroupBox>
                         </Grid>
 
                     </Grid>
