@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using System.Windows.Shapes;
 using System.Windows.Controls;
+using System.Threading;
 
 namespace ParkinsonsKinectApplication
 {
@@ -23,14 +24,13 @@ namespace ParkinsonsKinectApplication
     public partial class MainWindow : Window
     {
         private KinectHandler kinectHandler;
-        private KNearestNeighbour knn;
         private byte[] pixelDataColor { get; set; }
-        byte[] depth32;
-        short[] pixelDataDepth;
-        DepthImageFrame frame;
         public bool IsRecordingStarted { get; set; }
-        ObservableCollection<SkeletonInfo> skeletonCollection = new ObservableCollection<SkeletonInfo>();
-        Skeleton skeleton;
+        private ObservableCollection<SkeletonInfo> skeletonCollection = new ObservableCollection<SkeletonInfo>();
+        private Skeleton skeleton;
+        private Boolean isCapturingJointData = false;
+        private static ReaderWriterLockSlim _readWriteLock = new ReaderWriterLockSlim();
+
 
 
 
@@ -39,6 +39,7 @@ namespace ParkinsonsKinectApplication
             InitializeComponent();
             Loaded += new RoutedEventHandler(this.MainWindow_Loaded);
             Unloaded += new RoutedEventHandler(MainWindow_Unloaded);
+            btnCaptureStop.IsEnabled = false;
         }
 
         protected void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -159,16 +160,66 @@ namespace ParkinsonsKinectApplication
 
             int trackedSkeleton = skeleton.Joints.Where(item => item.TrackingState == JointTrackingState.Tracked).Count();
             progressBar1.Value = trackedSkeleton;
-           DrawDefaultSkeleton();
+
+            if(isCapturingJointData) captureJointData(skeleton);
+            DrawDefaultSkeleton();
         }
 
-        private void DrawDefaultSkeleton()
+        private void captureJointData(Skeleton skeleton)
         {
-                DrawSpine();
-                DrawLeftArm();
-                DrawRightArm();
-                DrawLeftLeg();
-                DrawRightLeg();
+            //string path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"SkeletonJointFiles\test.txt");
+            String jointData = "";
+            //StreamWriter sw = new StreamWriter(path);
+            if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
+            {
+                foreach (Joint joint in skeleton.Joints)
+                {
+                    jointData += joint.JointType.ToString() + ":" + joint.Position.X + "," + joint.Position.Y + "," + joint.Position.Z;
+                    Console.Write(jointData);
+                }
+                try
+                {
+                    WriteToFileThreadSafe(jointData, "C:\\development\\ParkinsonsKinectApplication\\ParkinsonsKinectApplication\\SkeletonJointFiles\\test.txt");
+                }
+                catch(System.IO.IOException e)
+                {
+                    Console.Write("Shit has occured: " + e);
+                }
+            }
+        }
+
+        public void WriteToFileThreadSafe(string text, string path)
+        {
+            // Set Status to Locked
+            _readWriteLock.EnterWriteLock();
+            try
+            {
+                //create file if it does not exist
+                if (!File.Exists(path))
+                {
+                    FileStream fs = File.Create(path);
+                }
+                // Append text to the file
+                using (StreamWriter sw = File.AppendText(path))
+                {
+                    sw.WriteLine(text);
+                    sw.Close();
+                }
+            }
+            finally
+            {
+                // Release lock
+                _readWriteLock.ExitWriteLock();
+            }
+        }
+
+            private void DrawDefaultSkeleton()
+        {
+            DrawSpine();
+            DrawLeftArm();
+            DrawRightArm();
+            DrawLeftLeg();
+            DrawRightLeg();
         }
 
         private void DrawHeadShoulder()
@@ -245,7 +296,6 @@ namespace ParkinsonsKinectApplication
             {
                 Point mappedPoint = this.ScalePosition(trackedJoint2.Position);
                 TextBlock textBlock = new TextBlock();
-                textBlock.Text = trackedJoint2.JointType.ToString();
                 textBlock.Foreground = Brushes.Black;
                 Canvas.SetLeft(textBlock, mappedPoint.X + 5);
                 Canvas.SetTop(textBlock, mappedPoint.Y + 5);
@@ -298,9 +348,19 @@ namespace ParkinsonsKinectApplication
             drawBone(skeleton.Joints[JointType.AnkleRight], skeleton.Joints[JointType.FootRight]);
         }
 
-        private void btnStopKinect_Click(object sender, RoutedEventArgs e)
+        private void btnCaptureStart_Click(object sender, RoutedEventArgs e)
         {
-            this.kinectHandler.stopKinect();
+            isCapturingJointData = true;
+            btnCaptureStart.IsEnabled = false;
+            btnCaptureStop.IsEnabled = true;
+
+        }
+
+        private void btnCaptureStop_Click(object sender, RoutedEventArgs e)
+        {
+            isCapturingJointData = false;
+            btnCaptureStart.IsEnabled = true;
+            btnCaptureStop.IsEnabled = false;
         }
     }
 }
