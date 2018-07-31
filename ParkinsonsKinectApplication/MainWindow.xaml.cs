@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Shapes;
 using System.Windows.Controls;
 using System.Threading;
+using ParkinsonsKinectApplication.Utilities;
 
 namespace ParkinsonsKinectApplication
 {
@@ -30,9 +31,6 @@ namespace ParkinsonsKinectApplication
         private Skeleton skeleton;
         private Boolean isCapturingJointData = false;
         private static ReaderWriterLockSlim _readWriteLock = new ReaderWriterLockSlim();
-
-
-
 
         public MainWindow()
         {
@@ -174,16 +172,17 @@ namespace ParkinsonsKinectApplication
             {
                 foreach (Joint joint in skeleton.Joints)
                 {
-                    jointData += joint.JointType.ToString() + ":" + joint.Position.X + "," + joint.Position.Y + "," + joint.Position.Z;
+                    jointData += ":" + joint.JointType.ToString() + ":" + joint.Position.X + "," + joint.Position.Y + "," + joint.Position.Z + ",";
                     Console.Write(jointData);
                 }
                 try
                 {
-                    WriteToFileThreadSafe(jointData, "C:\\development\\ParkinsonsKinectApplication\\ParkinsonsKinectApplication\\SkeletonJointFiles\\test.txt");
+                    WriteToFileThreadSafe(jointData, 
+                        "C:\\development\\ParkinsonsKinectApplication\\ParkinsonsKinectApplication\\SkeletonJointFiles\\" + FileUtilities.generateTimeStamp() + ".txt");
                 }
                 catch(System.IO.IOException e)
                 {
-                    Console.Write("Shit has occured: " + e);
+                    Console.Write("IO exception has occured: " + e);
                 }
             }
         }

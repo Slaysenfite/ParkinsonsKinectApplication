@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ParkinsonsKinectApplication.KinectModule;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,16 @@ namespace ParkinsonsKinectApplication.MathUtilities
 {
     class CovarianceMatrix
     {
-        private JointData joints;
+        private SkeletonJointData[][] matrix;
+
+        public CovarianceMatrix() {
+
+        }
+
+        public CovarianceMatrix(SkeletonJointData[][] matrix)
+        {
+            this.matrix = matrix;
+        }
+
     }
 }
