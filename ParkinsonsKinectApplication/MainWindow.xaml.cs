@@ -31,6 +31,7 @@ namespace ParkinsonsKinectApplication
         private Skeleton skeleton;
         private Boolean isCapturingJointData = false;
         private static ReaderWriterLockSlim _readWriteLock = new ReaderWriterLockSlim();
+        private String currentFilename;
 
         public MainWindow()
         {
@@ -173,12 +174,10 @@ namespace ParkinsonsKinectApplication
                 foreach (Joint joint in skeleton.Joints)
                 {
                     jointData += ":" + joint.JointType.ToString() + ":" + joint.Position.X + "," + joint.Position.Y + "," + joint.Position.Z + ",";
-                    Console.Write(jointData);
                 }
                 try
                 {
-                    WriteToFileThreadSafe(jointData, 
-                        "C:\\development\\ParkinsonsKinectApplication\\ParkinsonsKinectApplication\\SkeletonJointFiles\\" + FileUtilities.generateTimeStamp() + ".txt");
+                    WriteToFileThreadSafe(jointData, currentFilename);
                 }
                 catch(System.IO.IOException e)
                 {
@@ -221,10 +220,6 @@ namespace ParkinsonsKinectApplication
             DrawRightLeg();
         }
 
-        private void DrawHeadShoulder()
-        {
-            drawBone(skeleton.Joints[JointType.Head], skeleton.Joints[JointType.ShoulderCenter]);
-        }
         private void DrawSpine()
         {
             drawBone(skeleton.Joints[JointType.Head], skeleton.Joints[JointType.ShoulderCenter]);
@@ -319,36 +314,10 @@ namespace ParkinsonsKinectApplication
             return new Point(depthPoint.X, depthPoint.Y);
         }
 
-        private void DrawSkeleton(Skeleton skeleton)
-        {
-
-            drawBone(skeleton.Joints[JointType.Head], skeleton.Joints[JointType.ShoulderCenter]);
-            drawBone(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.Spine]);
-
-            drawBone(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.ShoulderLeft]);
-            drawBone(skeleton.Joints[JointType.ShoulderLeft], skeleton.Joints[JointType.ElbowLeft]);
-            drawBone(skeleton.Joints[JointType.ElbowLeft], skeleton.Joints[JointType.WristLeft]);
-            drawBone(skeleton.Joints[JointType.WristLeft], skeleton.Joints[JointType.HandLeft]);
-
-            drawBone(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.ShoulderRight]);
-            drawBone(skeleton.Joints[JointType.ShoulderRight], skeleton.Joints[JointType.ElbowRight]);
-            drawBone(skeleton.Joints[JointType.ElbowRight], skeleton.Joints[JointType.WristRight]);
-            drawBone(skeleton.Joints[JointType.WristRight], skeleton.Joints[JointType.HandRight]);
-
-            drawBone(skeleton.Joints[JointType.Spine], skeleton.Joints[JointType.HipCenter]);
-            drawBone(skeleton.Joints[JointType.HipCenter], skeleton.Joints[JointType.HipLeft]);
-            drawBone(skeleton.Joints[JointType.HipLeft], skeleton.Joints[JointType.KneeLeft]);
-            drawBone(skeleton.Joints[JointType.KneeLeft], skeleton.Joints[JointType.AnkleLeft]);
-            drawBone(skeleton.Joints[JointType.AnkleLeft], skeleton.Joints[JointType.FootLeft]);
-
-            drawBone(skeleton.Joints[JointType.HipCenter], skeleton.Joints[JointType.HipRight]);
-            drawBone(skeleton.Joints[JointType.HipRight], skeleton.Joints[JointType.KneeRight]);
-            drawBone(skeleton.Joints[JointType.KneeRight], skeleton.Joints[JointType.AnkleRight]);
-            drawBone(skeleton.Joints[JointType.AnkleRight], skeleton.Joints[JointType.FootRight]);
-        }
-
         private void btnCaptureStart_Click(object sender, RoutedEventArgs e)
         {
+            currentFilename = "C:\\development\\ParkinsonsKinectApplication\\ParkinsonsKinectApplication\\SkeletonJointFiles\\"
+                + FileUtilities.generateUniqueFilename("ID001");
             isCapturingJointData = true;
             btnCaptureStart.IsEnabled = false;
             btnCaptureStop.IsEnabled = true;
@@ -360,6 +329,7 @@ namespace ParkinsonsKinectApplication
             isCapturingJointData = false;
             btnCaptureStart.IsEnabled = true;
             btnCaptureStop.IsEnabled = false;
+            currentFilename = "";
         }
     }
 }

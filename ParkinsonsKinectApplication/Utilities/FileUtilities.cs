@@ -9,9 +9,12 @@ namespace ParkinsonsKinectApplication.Utilities
 {
     class FileUtilities
     {
-        public static string generateTimeStamp()
+        private const int X_COORDINATE_INDEX = 0;
+        private const int Y_COORDINATE_INDEX = 1;
+        private const int Z_COORDINATE_INDEX = 2;
+        public static string generateUniqueFilename(String userID)
         {
-            return "implementThisMethod";
+            return string.Format(userID + "-{0}.txt", DateTime.Now.Ticks);
         }
 
         public SkeletonJointData[] populateSkeletonJointLists(String filename)
