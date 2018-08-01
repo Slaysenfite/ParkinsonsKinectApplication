@@ -14,6 +14,8 @@ using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using System.Windows.Shapes;
 using System.Windows.Controls;
+using System.Threading;
+using ParkinsonsKinectApplication.Utilities;
 
 namespace ParkinsonsKinectApplication
 {
@@ -23,22 +25,20 @@ namespace ParkinsonsKinectApplication
     public partial class MainWindow : Window
     {
         private KinectHandler kinectHandler;
-        private KNearestNeighbour knn;
         private byte[] pixelDataColor { get; set; }
-        byte[] depth32;
-        short[] pixelDataDepth;
-        DepthImageFrame frame;
         public bool IsRecordingStarted { get; set; }
-        ObservableCollection<SkeletonInfo> skeletonCollection = new ObservableCollection<SkeletonInfo>();
-        Skeleton skeleton;
-
-
+        private ObservableCollection<SkeletonInfo> skeletonCollection = new ObservableCollection<SkeletonInfo>();
+        private Skeleton skeleton;
+        private Boolean isCapturingJointData = false;
+        private static ReaderWriterLockSlim _readWriteLock = new ReaderWriterLockSlim();
+        private String currentFilename;
 
         public MainWindow()
         {
             InitializeComponent();
             Loaded += new RoutedEventHandler(this.MainWindow_Loaded);
             Unloaded += new RoutedEventHandler(MainWindow_Unloaded);
+            btnCaptureStop.IsEnabled = false;
         }
 
         protected void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -159,22 +159,67 @@ namespace ParkinsonsKinectApplication
 
             int trackedSkeleton = skeleton.Joints.Where(item => item.TrackingState == JointTrackingState.Tracked).Count();
             progressBar1.Value = trackedSkeleton;
-           DrawDefaultSkeleton();
+
+            if(isCapturingJointData) captureJointData(skeleton);
+            DrawDefaultSkeleton();
         }
 
-        private void DrawDefaultSkeleton()
+        private void captureJointData(Skeleton skeleton)
         {
-                DrawSpine();
-                DrawLeftArm();
-                DrawRightArm();
-                DrawLeftLeg();
-                DrawRightLeg();
+            //string path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"SkeletonJointFiles\test.txt");
+            String jointData = "";
+            //StreamWriter sw = new StreamWriter(path);
+            if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
+            {
+                foreach (Joint joint in skeleton.Joints)
+                {
+                    jointData += ":" + joint.JointType.ToString() + ":" + joint.Position.X + "," + joint.Position.Y + "," + joint.Position.Z + ",";
+                }
+                try
+                {
+                    WriteToFileThreadSafe(jointData, currentFilename);
+                }
+                catch(System.IO.IOException e)
+                {
+                    Console.Write("IO exception has occured: " + e);
+                }
+            }
         }
 
-        private void DrawHeadShoulder()
+        public void WriteToFileThreadSafe(string text, string path)
         {
-            drawBone(skeleton.Joints[JointType.Head], skeleton.Joints[JointType.ShoulderCenter]);
+            // Set Status to Locked
+            _readWriteLock.EnterWriteLock();
+            try
+            {
+                //create file if it does not exist
+                if (!File.Exists(path))
+                {
+                    FileStream fs = File.Create(path);
+                }
+                // Append text to the file
+                using (StreamWriter sw = File.AppendText(path))
+                {
+                    sw.WriteLine(text);
+                    sw.Close();
+                }
+            }
+            finally
+            {
+                // Release lock
+                _readWriteLock.ExitWriteLock();
+            }
         }
+
+            private void DrawDefaultSkeleton()
+        {
+            DrawSpine();
+            DrawLeftArm();
+            DrawRightArm();
+            DrawLeftLeg();
+            DrawRightLeg();
+        }
+
         private void DrawSpine()
         {
             drawBone(skeleton.Joints[JointType.Head], skeleton.Joints[JointType.ShoulderCenter]);
@@ -245,7 +290,6 @@ namespace ParkinsonsKinectApplication
             {
                 Point mappedPoint = this.ScalePosition(trackedJoint2.Position);
                 TextBlock textBlock = new TextBlock();
-                textBlock.Text = trackedJoint2.JointType.ToString();
                 textBlock.Foreground = Brushes.Black;
                 Canvas.SetLeft(textBlock, mappedPoint.X + 5);
                 Canvas.SetTop(textBlock, mappedPoint.Y + 5);
@@ -270,37 +314,22 @@ namespace ParkinsonsKinectApplication
             return new Point(depthPoint.X, depthPoint.Y);
         }
 
-        private void DrawSkeleton(Skeleton skeleton)
+        private void btnCaptureStart_Click(object sender, RoutedEventArgs e)
         {
+            currentFilename = "C:\\development\\ParkinsonsKinectApplication\\ParkinsonsKinectApplication\\SkeletonJointFiles\\"
+                + FileUtilities.generateUniqueFilename("ID001");
+            isCapturingJointData = true;
+            btnCaptureStart.IsEnabled = false;
+            btnCaptureStop.IsEnabled = true;
 
-            drawBone(skeleton.Joints[JointType.Head], skeleton.Joints[JointType.ShoulderCenter]);
-            drawBone(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.Spine]);
-
-            drawBone(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.ShoulderLeft]);
-            drawBone(skeleton.Joints[JointType.ShoulderLeft], skeleton.Joints[JointType.ElbowLeft]);
-            drawBone(skeleton.Joints[JointType.ElbowLeft], skeleton.Joints[JointType.WristLeft]);
-            drawBone(skeleton.Joints[JointType.WristLeft], skeleton.Joints[JointType.HandLeft]);
-
-            drawBone(skeleton.Joints[JointType.ShoulderCenter], skeleton.Joints[JointType.ShoulderRight]);
-            drawBone(skeleton.Joints[JointType.ShoulderRight], skeleton.Joints[JointType.ElbowRight]);
-            drawBone(skeleton.Joints[JointType.ElbowRight], skeleton.Joints[JointType.WristRight]);
-            drawBone(skeleton.Joints[JointType.WristRight], skeleton.Joints[JointType.HandRight]);
-
-            drawBone(skeleton.Joints[JointType.Spine], skeleton.Joints[JointType.HipCenter]);
-            drawBone(skeleton.Joints[JointType.HipCenter], skeleton.Joints[JointType.HipLeft]);
-            drawBone(skeleton.Joints[JointType.HipLeft], skeleton.Joints[JointType.KneeLeft]);
-            drawBone(skeleton.Joints[JointType.KneeLeft], skeleton.Joints[JointType.AnkleLeft]);
-            drawBone(skeleton.Joints[JointType.AnkleLeft], skeleton.Joints[JointType.FootLeft]);
-
-            drawBone(skeleton.Joints[JointType.HipCenter], skeleton.Joints[JointType.HipRight]);
-            drawBone(skeleton.Joints[JointType.HipRight], skeleton.Joints[JointType.KneeRight]);
-            drawBone(skeleton.Joints[JointType.KneeRight], skeleton.Joints[JointType.AnkleRight]);
-            drawBone(skeleton.Joints[JointType.AnkleRight], skeleton.Joints[JointType.FootRight]);
         }
 
-        private void btnStopKinect_Click(object sender, RoutedEventArgs e)
+        private void btnCaptureStop_Click(object sender, RoutedEventArgs e)
         {
-            this.kinectHandler.stopKinect();
+            isCapturingJointData = false;
+            btnCaptureStart.IsEnabled = true;
+            btnCaptureStop.IsEnabled = false;
+            currentFilename = "";
         }
     }
 }

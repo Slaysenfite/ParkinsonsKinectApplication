@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace ParkinsonsKinectApplication.MathUtilities
 {
-    enum JointData
+    class JointWrapper
     {
+        double x, y, z;
+
     }
 }

@@ -59,6 +59,8 @@ namespace ParkinsonsKinectApplication.KinectModule
             }
         }
 
+      
+
         private bool deviceConnectionTest()
         {
             int deviceCount = KinectSensor.KinectSensors.Count;
