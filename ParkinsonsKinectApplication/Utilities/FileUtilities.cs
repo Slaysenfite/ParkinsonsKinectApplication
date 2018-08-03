@@ -17,7 +17,7 @@ namespace ParkinsonsKinectApplication.Utilities
             return string.Format(userID + "-{0}.txt", DateTime.Now.Ticks);
         }
 
-        public SkeletonJointData[] populateSkeletonJointLists(String filename)
+        public List<SkeletonJointData> populateSkeletonJointLists(String filename)
         {
 
             return null;
