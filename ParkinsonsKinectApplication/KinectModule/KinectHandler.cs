@@ -22,7 +22,7 @@ namespace ParkinsonsKinectApplication.KinectModule
             {
                 sensor = KinectSensor.KinectSensors[0];
                 sensor = KinectSensor.KinectSensors.FirstOrDefault(sensorItem => sensorItem.Status == KinectStatus.Connected);
-                Console.WriteLine(sensor.UniqueKinectId);
+                //Console.WriteLine(sensor.UniqueKinectId);
             }
             else
             {

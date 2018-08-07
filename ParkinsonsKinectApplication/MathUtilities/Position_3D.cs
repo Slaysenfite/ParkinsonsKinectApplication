@@ -39,5 +39,10 @@ namespace ParkinsonsKinectApplication.MathUtilities
             return Math.Sqrt(Math.Pow(v.x - x, 2) + Math.Pow(v.y - y, 2) + Math.Pow(v.z - z, 2));
         }
 
+        public String toString()
+        {
+            return "x: " + x + ", y: " + y + ", z: " + z + ". ";
+        }
+
     }
 }

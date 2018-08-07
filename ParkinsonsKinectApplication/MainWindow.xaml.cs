@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Windows.Controls;
 using System.Threading;
 using ParkinsonsKinectApplication.Utilities;
+using System.ComponentModel;
 
 namespace ParkinsonsKinectApplication
 {
@@ -32,18 +33,36 @@ namespace ParkinsonsKinectApplication
         private Boolean isCapturingJointData = false;
         private static ReaderWriterLockSlim _readWriteLock = new ReaderWriterLockSlim();
         private String currentFilename;
+        private BackgroundWorker myWorker;
+        private Skeleton[] skeletons;
+
 
         public MainWindow()
         {
-            InitializeComponent();
-            Loaded += new RoutedEventHandler(this.MainWindow_Loaded);
-            Unloaded += new RoutedEventHandler(MainWindow_Unloaded);
-            btnCaptureStop.IsEnabled = false;
+            if (KinectSensor.KinectSensors.Count > 0)
+            {
+                InitializeComponent();
+                Loaded += new RoutedEventHandler(this.MainWindow_Loaded);
+                Unloaded += new RoutedEventHandler(MainWindow_Unloaded);
+                btnCaptureStop.IsEnabled = false;
+                myWorker = new BackgroundWorker();
+
+                myWorker.DoWork += new DoWorkEventHandler(myWorker_DoWork);
+                myWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(myWorker_RunWorkerCompleted);
+                myWorker.ProgressChanged += new ProgressChangedEventHandler(myWorker_ProgressChanged);
+                myWorker.WorkerReportsProgress = true;
+                myWorker.WorkerSupportsCancellation = true;
+            }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("No Kinect device connected", "Device Connection Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         protected void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (KinectSensor.KinectSensors.Count > 0)
+            try
             {
                 kinectHandler = new KinectHandler();
                 this.kinectHandler.getSensor().Start();
@@ -67,11 +86,11 @@ namespace ParkinsonsKinectApplication
                     this.kinectHandler.getSensor().SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(sensor_SkeletonFrameReady);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("No Kinect device connected", "Device Connection Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.Write(ex);
             }
+
         }
 
         private void sensor_DepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
@@ -132,7 +151,8 @@ namespace ParkinsonsKinectApplication
             progressBar1.Value = 0;
             skeletonCanvas.Children.Clear();
             Brush brush = new SolidColorBrush(Colors.Red);
-            Skeleton[] skeletons = null;
+            //Skeleton[] skeletons = null;
+            skeletons = null;
             SkeletonFrame frame;
             using (frame = e.OpenSkeletonFrame())
             {
@@ -143,7 +163,8 @@ namespace ParkinsonsKinectApplication
                 }
             }
 
-            if (skeletons == null) return;
+            if (skeletons == null)
+                return;
 
             skeleton = (from trackSkeleton in skeletons
                         where trackSkeleton.TrackingState == SkeletonTrackingState.Tracked
@@ -160,33 +181,33 @@ namespace ParkinsonsKinectApplication
             int trackedSkeleton = skeleton.Joints.Where(item => item.TrackingState == JointTrackingState.Tracked).Count();
             progressBar1.Value = trackedSkeleton;
 
-            if(isCapturingJointData) captureJointData(skeleton);
+            if (isCapturingJointData) {
+                captureJointData(skeleton);
+            }
             DrawDefaultSkeleton();
         }
 
         private void captureJointData(Skeleton skeleton)
         {
-            //string path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"SkeletonJointFiles\test.txt");
             String jointData = "";
-            //StreamWriter sw = new StreamWriter(path);
             if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
             {
                 foreach (Joint joint in skeleton.Joints)
                 {
-                    jointData += ":" + joint.JointType.ToString() + ":" + joint.Position.X + "," + joint.Position.Y + "," + joint.Position.Z + ",";
+                    jointData += joint.JointType.ToString() + ":" + joint.Position.X + "," + joint.Position.Y + "," + joint.Position.Z + "  ";
                 }
                 try
                 {
-                    WriteToFileThreadSafe(jointData, currentFilename);
+                    WriteToFileThreadSafe(currentFilename, jointData);
                 }
-                catch(System.IO.IOException e)
+                catch (System.IO.IOException e)
                 {
                     Console.Write("IO exception has occured: " + e);
                 }
             }
         }
 
-        public void WriteToFileThreadSafe(string text, string path)
+        public void WriteToFileThreadSafe(string path, string data)
         {
             // Set Status to Locked
             _readWriteLock.EnterWriteLock();
@@ -195,12 +216,12 @@ namespace ParkinsonsKinectApplication
                 //create file if it does not exist
                 if (!File.Exists(path))
                 {
-                    FileStream fs = File.Create(path);
+                    using (FileStream fs = File.Create(path)) { };
                 }
-                // Append text to the file
+
                 using (StreamWriter sw = File.AppendText(path))
                 {
-                    sw.WriteLine(text);
+                    sw.WriteLine(data);
                     sw.Close();
                 }
             }
@@ -211,7 +232,29 @@ namespace ParkinsonsKinectApplication
             }
         }
 
-            private void DrawDefaultSkeleton()
+        protected void myWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (skeletons == null)
+                return;
+            skeleton = (from trackSkeleton in skeletons
+                        where trackSkeleton.TrackingState == SkeletonTrackingState.Tracked
+                        select trackSkeleton).FirstOrDefault();
+            if (skeleton == null)
+                return;
+            captureJointData(skeleton);
+        }
+
+        protected void myWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Console.Write("Thread completed");
+        }
+
+        protected void myWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+
+        }
+
+        private void DrawDefaultSkeleton()
         {
             DrawSpine();
             DrawLeftArm();
@@ -263,7 +306,7 @@ namespace ParkinsonsKinectApplication
             Point joint1 = this.ScalePosition(trackedJoint1.Position);
             bone.X1 = joint1.X;
             bone.Y1 = joint1.Y;
-          
+
             Point mappedPoint1 = this.ScalePosition(trackedJoint1.Position);
             Rectangle r = new Rectangle(); r.Height = 10; r.Width = 10;
             r.Fill = Brushes.Azure;
@@ -316,17 +359,25 @@ namespace ParkinsonsKinectApplication
 
         private void btnCaptureStart_Click(object sender, RoutedEventArgs e)
         {
-            currentFilename = "C:\\development\\ParkinsonsKinectApplication\\ParkinsonsKinectApplication\\SkeletonJointFiles\\"
-                + FileUtilities.generateUniqueFilename("ID001");
+            currentFilename = FileUtilities.RELATIVE_PATH + "SkeletonJointFiles//" + FileUtilities.generateUniqueFilename("ID001");
             isCapturingJointData = true;
-            btnCaptureStart.IsEnabled = false;
-            btnCaptureStop.IsEnabled = true;
 
+            if (!myWorker.IsBusy)//Check if the worker is already in progress
+            {
+                btnCaptureStart.IsEnabled = false;
+                btnCaptureStop.IsEnabled = true;
+                myWorker.RunWorkerAsync(skeletons);//Call the background worker
+            }
+            else
+            {
+                Console.Write("Worker is busy");
+            }
         }
 
         private void btnCaptureStop_Click(object sender, RoutedEventArgs e)
         {
             isCapturingJointData = false;
+            myWorker.CancelAsync();
             btnCaptureStart.IsEnabled = true;
             btnCaptureStop.IsEnabled = false;
             currentFilename = "";
