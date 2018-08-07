@@ -36,6 +36,7 @@ namespace ParkinsonsKinectApplication
         private BackgroundWorker myWorker;
         private Skeleton[] skeletons;
 
+
         public MainWindow()
         {
             if (KinectSensor.KinectSensors.Count > 0)
@@ -206,11 +207,6 @@ namespace ParkinsonsKinectApplication
             }
         }
 
-        /*
-         * Use a string buffer to teporarily store incoming joint data, then write it to file 
-         * in a seperate thread
-         */
-
         public void WriteToFileThreadSafe(string path, string data)
         {
             // Set Status to Locked
@@ -363,8 +359,7 @@ namespace ParkinsonsKinectApplication
 
         private void btnCaptureStart_Click(object sender, RoutedEventArgs e)
         {
-            currentFilename = @"C:\\development\\ParkinsonsKinectApplication\\ParkinsonsKinectApplication\\SkeletonJointFiles\\"
-                + FileUtilities.generateUniqueFilename("ID001");
+            currentFilename = FileUtilities.RELATIVE_PATH + "SkeletonJointFiles//" + FileUtilities.generateUniqueFilename("ID001");
             isCapturingJointData = true;
 
             if (!myWorker.IsBusy)//Check if the worker is already in progress

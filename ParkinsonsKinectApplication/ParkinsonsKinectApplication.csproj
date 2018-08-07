@@ -146,6 +146,20 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="SkeletonJointFiles\ID001-636688432353635134.txt" />
+    <Resource Include="SkeletonJointFiles\ID001-636689195286732458.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="SkeletonJointFiles\ID001-636689181827144599.txt" />
+    <Resource Include="SkeletonJointFiles\ID001-636689186362990084.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="SkeletonJointFiles\ID001-636689871756007696.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="SkeletonJointFiles\ID001-636689259550700259.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PythonScripts\SkeletonJointDataProcessing.py" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
