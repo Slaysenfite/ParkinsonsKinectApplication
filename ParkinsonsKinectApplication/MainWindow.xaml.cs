@@ -17,6 +17,7 @@ using System.Windows.Controls;
 using System.Threading;
 using ParkinsonsKinectApplication.Utilities;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace ParkinsonsKinectApplication
 {
@@ -35,6 +36,7 @@ namespace ParkinsonsKinectApplication
         private String currentFilename;
         private BackgroundWorker myWorker;
         private Skeleton[] skeletons;
+        private Stopwatch stopWatch;
 
 
         public MainWindow()
@@ -189,12 +191,15 @@ namespace ParkinsonsKinectApplication
 
         private void captureJointData(Skeleton skeleton)
         {
-            String jointData = "";
+            stopWatch.Stop();
+            String jointData = stopWatch.ElapsedMilliseconds + ",";
+            stopWatch.Start();
             if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
             {
                 foreach (Joint joint in skeleton.Joints)
                 {
-                    jointData += joint.JointType.ToString() + ":" + joint.Position.X + "," + joint.Position.Y + "," + joint.Position.Z + "  ";
+                    //jointData += joint.JointType.ToString() + ":" + joint.Position.X + "," + joint.Position.Y + "," + joint.Position.Z + "  ";
+                    jointData += joint.Position.X + "," + joint.Position.Y + "," + joint.Position.Z + ",";
                 }
                 try
                 {
@@ -216,7 +221,12 @@ namespace ParkinsonsKinectApplication
                 //create file if it does not exist
                 if (!File.Exists(path))
                 {
-                    using (FileStream fs = File.Create(path)) { };
+                    using (FileStream fs = File.Create(path)) {}
+                    using (StreamWriter sw = File.AppendText(path))
+                    {
+                        sw.WriteLine(FileUtilities.FILE_HEADER);
+                        sw.Close();
+                    }
                 }
 
                 using (StreamWriter sw = File.AppendText(path))
@@ -367,6 +377,7 @@ namespace ParkinsonsKinectApplication
                 btnCaptureStart.IsEnabled = false;
                 btnCaptureStop.IsEnabled = true;
                 myWorker.RunWorkerAsync(skeletons);//Call the background worker
+                stopWatch = new Stopwatch();
             }
             else
             {
@@ -376,6 +387,8 @@ namespace ParkinsonsKinectApplication
 
         private void btnCaptureStop_Click(object sender, RoutedEventArgs e)
         {
+            stopWatch.Stop();
+            stopWatch.Reset();
             isCapturingJointData = false;
             myWorker.CancelAsync();
             btnCaptureStart.IsEnabled = true;
