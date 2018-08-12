@@ -54,6 +54,9 @@ namespace ParkinsonsKinectApplication
                 myWorker.ProgressChanged += new ProgressChangedEventHandler(myWorker_ProgressChanged);
                 myWorker.WorkerReportsProgress = true;
                 myWorker.WorkerSupportsCancellation = true;
+
+                txtOutToUser.Text += "Window initialized \n";
+
             }
             else
             {
@@ -87,6 +90,7 @@ namespace ParkinsonsKinectApplication
                     this.kinectHandler.getSensor().SkeletonStream.Enable();
                     this.kinectHandler.getSensor().SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(sensor_SkeletonFrameReady);
                 }
+                txtOutToUser.Text += "Kinect ready \n";
             }
             catch (Exception ex)
             {
@@ -369,13 +373,28 @@ namespace ParkinsonsKinectApplication
 
         private void btnCaptureStart_Click(object sender, RoutedEventArgs e)
         {
-            currentFilename = FileUtilities.RELATIVE_PATH + "SkeletonJointFiles//" + FileUtilities.generateUniqueFilename("ID001");
+
+            if (!UIUtilities.validateTextBox(txtSubjectName.Text))
+            {
+                System.Windows.Forms.MessageBox.Show("Please enter subject name.", "Input error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            txtOutToUser.Text += "Recording user: " + txtSubjectName.Text + "\n";
+
+            currentFilename = FileUtilities.RELATIVE_PATH + "SkeletonJointFiles//" + FileUtilities.generateUniqueFilename(txtSubjectName.Text);
             isCapturingJointData = true;
 
             if (!myWorker.IsBusy)//Check if the worker is already in progress
             {
                 btnCaptureStart.IsEnabled = false;
+                btnReport.IsEnabled = false;
+                depthImageControl.IsEnabled = false;
+                VideoControl.IsEnabled = false;
                 btnCaptureStop.IsEnabled = true;
+                txtSubjectName.IsEnabled = false;
+
                 myWorker.RunWorkerAsync(skeletons);//Call the background worker
                 stopWatch = new Stopwatch();
             }
@@ -391,8 +410,16 @@ namespace ParkinsonsKinectApplication
             stopWatch.Reset();
             isCapturingJointData = false;
             myWorker.CancelAsync();
+
+            txtOutToUser.Text += "Recording session user: " + txtSubjectName.Text + " stopped \n";
+            txtOutToUser.Text += "File " + currentFilename + " created for " + txtSubjectName.Text + "\n";
+
             btnCaptureStart.IsEnabled = true;
             btnCaptureStop.IsEnabled = false;
+            btnReport.IsEnabled = true;
+            depthImageControl.IsEnabled = true;
+            VideoControl.IsEnabled = true;
+            txtSubjectName.IsEnabled = true;
             currentFilename = "";
         }
     }

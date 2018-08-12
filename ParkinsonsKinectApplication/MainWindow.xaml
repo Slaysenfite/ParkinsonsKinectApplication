@@ -5,16 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParkinsonsKinectApplication"
         mc:Ignorable="d"
-        Title="Early Parkinson's Detection Application" Height="600" Width="1000" Loaded="MainWindow_Loaded">
+        Title="Early Parkinson's Detection Application" Height="600" Width="944" Loaded="MainWindow_Loaded">
     <Viewbox Margin="0,0,2,1">
         <Grid Height="1128" Background="#FFF0F0F0">
             <Grid Height="1040" Width="1865">
                 <StackPanel Margin="0,0,0,-29">
                     <Grid Height="1068" VerticalAlignment="Top">
-                        <Image Name="VideoControl" Margin="15,0,607,128"  />
-                        <Grid Margin="1263,0,10,109" RenderTransformOrigin="-4.668,0.65">
-                            <Image Name="depthImageControl" Margin="0,491,10,0"/>
-                            <Canvas Name="skeletonCanvas" Margin="10,0,10,473" Background="LightGray"/>
+                        <Image Name="VideoControl" Margin="15,0,1063,528"  />
+                        <Image x:Name="depthImageControl" Margin="817,469,476,114"/>
+                        <Canvas x:Name="skeletonCanvas" Margin="817,0,0,604" Background="LightGray" HorizontalAlignment="Left" Width="572"/>
+                        <Grid HorizontalAlignment="Left" Width="461" Margin="1394,0,0,114">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="254*"/>
+                                <ColumnDefinition Width="207*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="txtOutToUser" HorizontalAlignment="Left" Height="944" Margin="10,0,0,10" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="441" FontSize="24" Background="White" Grid.ColumnSpan="2" IsReadOnly="True"/>
                         </Grid>
                         <Grid HorizontalAlignment="Left" Height="109" Margin="10,959,0,0" VerticalAlignment="Top" Width="1845" Background="#FFF3F3F3">
                             <Button Content="Start Capture" Name="btnCaptureStart" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="238" Click="btnCaptureStart_Click" Height="89" FontSize="36"/>
@@ -25,6 +30,11 @@
                                     <ProgressBar Margin="6,10,10,10" Name="progressBar1" Orientation="Horizontal" Value="0" Maximum="20" Minimum="0" Grid.ColumnSpan="4" />
                                 </Grid>
                             </GroupBox>
+                            <Button Content="Generate Report" x:Name="btnReport" Margin="496,10,0,0" VerticalAlignment="Top" Click="btnCaptureStop_Click" Height="89" FontSize="36" HorizontalAlignment="Left" Width="280"/>
+                        </Grid>
+                        <Grid HorizontalAlignment="Left" Height="414" Margin="15,545,0,0" VerticalAlignment="Top" Width="787">
+                            <Label x:Name="lblName" Content="Subject Name:" HorizontalAlignment="Left" Margin="17,29,0,0" VerticalAlignment="Top" FontSize="24"/>
+                            <TextBox x:Name="txtSubjectName" Height="42" Margin="0,0,30,343" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="24" HorizontalAlignment="Right" Width="572"/>
                         </Grid>
 
                     </Grid>
