@@ -43,8 +43,14 @@ namespace ParkinsonsKinectApplication
         public MainWindow()
         {
             InitializeComponent();
+
+            txtOutToUser.Text += "User Console: \nWindow initialized \n";
+
             Loaded += new RoutedEventHandler(this.MainWindow_Loaded);
             Unloaded += new RoutedEventHandler(MainWindow_Unloaded);
+
+            txtOutToUser.Text += "Kinect Ready \n";
+
             btnCaptureStop.IsEnabled = false;
             myWorker = new BackgroundWorker();
 
@@ -54,7 +60,6 @@ namespace ParkinsonsKinectApplication
             myWorker.WorkerReportsProgress = true;
             myWorker.WorkerSupportsCancellation = true;
 
-            txtOutToUser.Text += "Window initialized \n";
 
             List<String> experiments = new List<String>();
             cbExperimentType.ItemsSource = UIUtilities.experimentType();
@@ -86,7 +91,6 @@ namespace ParkinsonsKinectApplication
                         this.kinectHandler.getSensor().SkeletonStream.Enable();
                         this.kinectHandler.getSensor().SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(sensor_SkeletonFrameReady);
                     }
-                    txtOutToUser.Text += "Kinect ready \n";
                 }
                 catch (Exception ex)
                 {
@@ -287,7 +291,6 @@ namespace ParkinsonsKinectApplication
             drawBone(skeleton.Joints[JointType.ShoulderLeft], skeleton.Joints[JointType.ElbowLeft]);
             drawBone(skeleton.Joints[JointType.ElbowLeft], skeleton.Joints[JointType.WristLeft]);
             drawBone(skeleton.Joints[JointType.WristLeft], skeleton.Joints[JointType.HandLeft]);
-
         }
         private void DrawRightArm()
         {

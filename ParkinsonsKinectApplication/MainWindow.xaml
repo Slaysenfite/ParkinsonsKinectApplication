@@ -33,9 +33,9 @@
                             <Button Content="Generate Report" x:Name="btnReport" Margin="496,10,0,0" VerticalAlignment="Top" Click="btnGenerateReport_Click" Height="89" FontSize="36" HorizontalAlignment="Left" Width="280"/>
                         </Grid>
                         <Grid HorizontalAlignment="Left" Height="414" Margin="15,545,0,0" VerticalAlignment="Top" Width="787">
-                            <Label x:Name="lblName" Content="Subject Name:" HorizontalAlignment="Left" Margin="17,29,0,0" VerticalAlignment="Top" FontSize="24"/>
-                            <TextBox x:Name="txtSubjectName" Height="42" Margin="0,0,30,343" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="24" HorizontalAlignment="Right" Width="572"/>
-                            <ComboBox x:Name="cbExperimentType" HorizontalAlignment="Left" Margin="17,76,0,0" VerticalAlignment="Top" Width="740" Height="42" BorderBrush="#FFF0EEEE" OpacityMask="White" SelectionChanged="cbExperimentType_SelectionChanged" FontSize="24" Text="Experement Type">
+                            <Label x:Name="lblName" Content="Subject Name:" HorizontalAlignment="Left" Margin="17,29,0,0" VerticalAlignment="Top" FontSize="36"/>
+                            <TextBox x:Name="txtSubjectName" Height="47" Margin="0,0,10,327" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="36" HorizontalAlignment="Right" Width="515"/>
+                            <ComboBox x:Name="cbExperimentType" HorizontalAlignment="Left" Margin="10,92,0,0" VerticalAlignment="Top" Width="767" Height="53" BorderBrush="#FFF0EEEE" OpacityMask="White" SelectionChanged="cbExperimentType_SelectionChanged" FontSize="24" Text="Experement Type">
                                 <ComboBox.Background>
                                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                                         <GradientStop Color="#FFF0F0F0" Offset="0"/>
