@@ -16,5 +16,14 @@ namespace ParkinsonsKinectApplication.Utilities
             }
             else return true;
         }
+
+        public static List<String> experimentType()
+        {
+            List<String> ret = new List<String>();
+            ret.Add("Front view gait sequence");
+            ret.Add("Back view gait sequence");
+            ret.Add("Side view gait sequence");
+            return ret;
+        }
     }
 }

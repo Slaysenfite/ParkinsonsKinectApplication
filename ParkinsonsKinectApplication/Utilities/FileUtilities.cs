@@ -30,9 +30,9 @@ namespace ParkinsonsKinectApplication.Utilities
                                             "AnkleRight_x,AnkleRight_y,AnkleRight_z,FootRight_x,FootRight_y,FootRight_z,drop_this_col";
 
 
-        public static string generateUniqueFilename(String userID)
+        public static string generateUniqueFilename(String userID, String code)
         {
-            return string.Format(userID + "-{0}.csv", DateTime.Now.Ticks);
+            return string.Format(userID + "-{0}.csv", code + "-" + DateTime.Now.Ticks);
         }
 
         public List<SkeletonJointData> populateSkeletonJointLists(String filename)
