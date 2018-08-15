@@ -27,12 +27,12 @@ namespace ParkinsonsKinectApplication.Utilities
                                             "HipLeft_x,HipLeft_y,HipLeft_z,KneeLeft_x,KneeLeft_y,KneeLeft_z," +
                                             "AnkleLeft_x,AnkleLeft_y,AnkleLeft_z,FootLeft_x,FootLeft_y,FootLeft_z," +
                                             "HipRight_x,HipRight_y,HipRight_z,KneeRight_x,KneeRight_y,KneeRight_z," +
-                                            "AnkleRight_x,AnkleRight_y,AnkleRight_z,FootRight_x,FootRight_y,FootRight_z";
+                                            "AnkleRight_x,AnkleRight_y,AnkleRight_z,FootRight_x,FootRight_y,FootRight_z,drop_this_col";
 
 
-        public static string generateUniqueFilename(String userID)
+        public static string generateUniqueFilename(String userID, String code)
         {
-            return string.Format(userID + "-{0}.csv", DateTime.Now.Ticks);
+            return string.Format(userID + "-{0}.csv", code + "-" + DateTime.Now.Ticks);
         }
 
         public List<SkeletonJointData> populateSkeletonJointLists(String filename)

@@ -37,62 +37,65 @@ namespace ParkinsonsKinectApplication
         private BackgroundWorker myWorker;
         private Skeleton[] skeletons;
         private Stopwatch stopWatch;
+        private Experiment experiment;
 
 
         public MainWindow()
         {
-            if (KinectSensor.KinectSensors.Count > 0)
-            {
-                InitializeComponent();
-                Loaded += new RoutedEventHandler(this.MainWindow_Loaded);
-                Unloaded += new RoutedEventHandler(MainWindow_Unloaded);
-                btnCaptureStop.IsEnabled = false;
-                myWorker = new BackgroundWorker();
+            InitializeComponent();
+            Loaded += new RoutedEventHandler(this.MainWindow_Loaded);
+            Unloaded += new RoutedEventHandler(MainWindow_Unloaded);
+            btnCaptureStop.IsEnabled = false;
+            myWorker = new BackgroundWorker();
 
-                myWorker.DoWork += new DoWorkEventHandler(myWorker_DoWork);
-                myWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(myWorker_RunWorkerCompleted);
-                myWorker.ProgressChanged += new ProgressChangedEventHandler(myWorker_ProgressChanged);
-                myWorker.WorkerReportsProgress = true;
-                myWorker.WorkerSupportsCancellation = true;
-            }
-            else
-            {
-                System.Windows.Forms.MessageBox.Show("No Kinect device connected", "Device Connection Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            myWorker.DoWork += new DoWorkEventHandler(myWorker_DoWork);
+            myWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(myWorker_RunWorkerCompleted);
+            myWorker.ProgressChanged += new ProgressChangedEventHandler(myWorker_ProgressChanged);
+            myWorker.WorkerReportsProgress = true;
+            myWorker.WorkerSupportsCancellation = true;
+
+            txtOutToUser.Text += "Window initialized \n";
+
+            List<String> experiments = new List<String>();
+            cbExperimentType.ItemsSource = UIUtilities.experimentType();
+            cbExperimentType.SelectedIndex = 0;
         }
 
         protected void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                kinectHandler = new KinectHandler();
-                this.kinectHandler.getSensor().Start();
+                try
+                {
+                    kinectHandler = new KinectHandler();
+                    this.kinectHandler.getSensor().Start();
 
-                this.kinectHandler.getSensor().ColorStream.Disable();
-                if (!this.kinectHandler.getSensor().ColorStream.IsEnabled)
-                {
-                    this.kinectHandler.getSensor().ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
-                    this.kinectHandler.getSensor().ColorFrameReady += new EventHandler<ColorImageFrameReadyEventArgs>(sensor_ColorFrameReady);
+                    this.kinectHandler.getSensor().ColorStream.Disable();
+                    if (!this.kinectHandler.getSensor().ColorStream.IsEnabled)
+                    {
+                        this.kinectHandler.getSensor().ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+                        this.kinectHandler.getSensor().ColorFrameReady += new EventHandler<ColorImageFrameReadyEventArgs>(sensor_ColorFrameReady);
+                    }
+                    this.kinectHandler.getSensor().DepthStream.Disable();
+                    if (!this.kinectHandler.getSensor().DepthStream.IsEnabled)
+                    {
+                        this.kinectHandler.getSensor().DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+                        this.kinectHandler.getSensor().DepthFrameReady += new EventHandler<DepthImageFrameReadyEventArgs>(sensor_DepthFrameReady);
+                    }
+                    this.kinectHandler.getSensor().SkeletonStream.Disable();
+                    if (!this.kinectHandler.getSensor().SkeletonStream.IsEnabled)
+                    {
+                        this.kinectHandler.getSensor().SkeletonStream.Enable();
+                        this.kinectHandler.getSensor().SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(sensor_SkeletonFrameReady);
+                    }
+                    txtOutToUser.Text += "Kinect ready \n";
                 }
-                this.kinectHandler.getSensor().DepthStream.Disable();
-                if (!this.kinectHandler.getSensor().DepthStream.IsEnabled)
+                catch (Exception ex)
                 {
-                    this.kinectHandler.getSensor().DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
-                    this.kinectHandler.getSensor().DepthFrameReady += new EventHandler<DepthImageFrameReadyEventArgs>(sensor_DepthFrameReady);
+                    Console.Write(ex);
+                System.Windows.Forms.MessageBox.Show("No Kinect device connected", "Device Connection Error",
+                      MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                this.kinectHandler.getSensor().SkeletonStream.Disable();
-                if (!this.kinectHandler.getSensor().SkeletonStream.IsEnabled)
-                {
-                    this.kinectHandler.getSensor().SkeletonStream.Enable();
-                    this.kinectHandler.getSensor().SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(sensor_SkeletonFrameReady);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.Write(ex);
-            }
 
+            
         }
 
         private void sensor_DepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
@@ -369,13 +372,28 @@ namespace ParkinsonsKinectApplication
 
         private void btnCaptureStart_Click(object sender, RoutedEventArgs e)
         {
-            currentFilename = FileUtilities.RELATIVE_PATH + "SkeletonJointFiles//" + FileUtilities.generateUniqueFilename("ID001");
+
+            if (!UIUtilities.validateTextBox(txtSubjectName.Text))
+            {
+                System.Windows.Forms.MessageBox.Show("Please enter subject name.", "Input error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            txtOutToUser.Text += "Recording user: " + txtSubjectName.Text + "\n";
+
+            currentFilename = FileUtilities.RELATIVE_PATH + "SkeletonJointFiles//" + FileUtilities.generateUniqueFilename(txtSubjectName.Text, experiment.getCode());
             isCapturingJointData = true;
 
             if (!myWorker.IsBusy)//Check if the worker is already in progress
             {
                 btnCaptureStart.IsEnabled = false;
+                btnReport.IsEnabled = false;
+                depthImageControl.IsEnabled = false;
+                VideoControl.IsEnabled = false;
                 btnCaptureStop.IsEnabled = true;
+                txtSubjectName.IsEnabled = false;
+
                 myWorker.RunWorkerAsync(skeletons);//Call the background worker
                 stopWatch = new Stopwatch();
             }
@@ -391,9 +409,27 @@ namespace ParkinsonsKinectApplication
             stopWatch.Reset();
             isCapturingJointData = false;
             myWorker.CancelAsync();
+
+            txtOutToUser.Text += "Recording session for user " + txtSubjectName.Text + " stopped \n";
+            txtOutToUser.Text += "File " + currentFilename + " created for " + txtSubjectName.Text + "\n";
+
             btnCaptureStart.IsEnabled = true;
             btnCaptureStop.IsEnabled = false;
+            btnReport.IsEnabled = true;
+            depthImageControl.IsEnabled = true;
+            VideoControl.IsEnabled = true;
+            txtSubjectName.IsEnabled = true;
             currentFilename = "";
+        }
+
+        private void cbExperimentType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            experiment = new Experiment(cbExperimentType.SelectedItem.ToString());
+        }
+
+        private void btnGenerateReport_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

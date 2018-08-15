@@ -81,7 +81,9 @@
     </ApplicationDefinition>
     <Compile Include="Algorithms\AlgorithmUtilities\IndexAndDistance.cs" />
     <Compile Include="Attributes\Iris.cs" />
+    <Compile Include="Utilities\Experiment.cs" />
     <Compile Include="Utilities\FileUtilities.cs" />
+    <Compile Include="Utilities\UIUtilities.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
