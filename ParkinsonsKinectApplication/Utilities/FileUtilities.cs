@@ -20,7 +20,7 @@ namespace ParkinsonsKinectApplication.Utilities
         public static String RELATIVE_PATH = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "..//..//");
         public static String FILE_HEADER = "HipCenterXPosition, HipCenterYPosition, HipCenterZPosition, SpineXPosition, SpineYPosition, " +
                                              "SpineZPosition, ShoulderCenterXPosition, ShoulderCenterYPosition, ShoulderCenterZPosition, HeadXPosition, HeadYPosition, " +
-                                             "HeadZPosition, ShoulderLeftX Position,ShoulderLeftYPosition, ShoulderLeftZPosition, ElbowLeftXPosition, ElbowLeftYPosition, " +
+                                             "HeadZPosition, ShoulderLeftXPosition,ShoulderLeftYPosition, ShoulderLeftZPosition, ElbowLeftXPosition, ElbowLeftYPosition, " +
                                              "ElbowLeftZPosition, WristLeftXPosition, WristLeftYPosition, WristLeftZPosition, HandLeftXPosition, HandLeftYPosition, " +
                                              "HandLeftZPosition, ShoulderRightXPosition, ShoulderRightYPosition, ShoulderRightZPosition, ElbowRightXPosition, ElbowRightYPosition, " +
                                              "ElbowRightZPosition, WristRightXPosition, WristRightYPosition, WristRightZPosition, HandRightXPosition, HandRightYPosition, " +
