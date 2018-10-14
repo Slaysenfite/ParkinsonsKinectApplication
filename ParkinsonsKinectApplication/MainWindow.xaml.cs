@@ -424,11 +424,8 @@ namespace ParkinsonsKinectApplication
 
         private void btnGenerateReport_Click(object sender, RoutedEventArgs e)
         {
-            int val = FileUtilities.pythonGenTrainingSet("C://development//ParkinsonsKinectApplication//ParkinsonsKinectApplication//PythonScripts//GenerateTrainingSet.py");
-            if (val == 0)
-                txtOutToUser.Text += "New training set created";
-            else
-                txtOutToUser.Text += "Unable to create new training set";
+            ReportWindow win2 = new ReportWindow();
+            win2.Show();
         }
     }
 }
