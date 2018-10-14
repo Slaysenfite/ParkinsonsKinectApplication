@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Linq;
 using Microsoft.Kinect;
 using System.Windows;
-using ParkinsonsKinectApplication.Algorithms;
 using ParkinsonsKinectApplication.KinectModule;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -425,7 +424,11 @@ namespace ParkinsonsKinectApplication
 
         private void btnGenerateReport_Click(object sender, RoutedEventArgs e)
         {
-
+            int val = FileUtilities.pythonGenTrainingSet("C://development//ParkinsonsKinectApplication//ParkinsonsKinectApplication//PythonScripts//GenerateTrainingSet.py");
+            if (val == 0)
+                txtOutToUser.Text += "New training set created";
+            else
+                txtOutToUser.Text += "Unable to create new training set";
         }
     }
 }

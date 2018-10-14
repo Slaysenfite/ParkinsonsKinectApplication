@@ -16,7 +16,7 @@ namespace ParkinsonsKinectApplication.Utilities
         private const int Z_COORDINATE_INDEX = 2;
 
         //public static String PYTHON_INTERPRETER_LOCATION = System.Windows.Forms.Application.StartupPath + "//python.exe";
-        public const string PYTHON_INTERPRETER_LOCATION = @"C:\Users\wesse\Anaconda3\python.exe";
+        public const string PYTHON_INTERPRETER_LOCATION = @"C:\Users\user\Anaconda3\python.exe";
         public static String RELATIVE_PATH = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "..//..//");
         public static String FILE_HEADER = "HipCenterXPosition, HipCenterYPosition, HipCenterZPosition, SpineXPosition, SpineYPosition, " +
                                              "SpineZPosition, ShoulderCenterXPosition, ShoulderCenterYPosition, ShoulderCenterZPosition, HeadXPosition, HeadYPosition, " +
@@ -54,6 +54,26 @@ namespace ParkinsonsKinectApplication.Utilities
 
             StreamReader pyProcReader = pyProc.StandardOutput;
             return pyProcReader.ReadLine();
+        }
+
+        public static int pythonGenTrainingSet(String pyScript)
+        {
+            ProcessStartInfo pyProcInfo = new ProcessStartInfo(PYTHON_INTERPRETER_LOCATION);
+            pyProcInfo.CreateNoWindow = true;
+            pyProcInfo.UseShellExecute = false;
+            pyProcInfo.RedirectStandardOutput = true;
+            pyProcInfo.Arguments = pyScript + " " 
+                + RELATIVE_PATH + " "
+                + RELATIVE_PATH + "ParkinsonsDetectionDataset//" + " "
+                + RELATIVE_PATH + "TrainingData//";
+            Process pyProc = new Process();
+            pyProc.StartInfo = pyProcInfo;
+            pyProc.Start();
+
+            StreamReader pyProcReader = pyProc.StandardOutput;
+            if (pyProcReader.ReadLine().Contains("DONE"))
+                return 0;
+            else return -1;
         }
     }
 }
