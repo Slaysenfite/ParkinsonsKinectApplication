@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace ParkinsonsKinectApplication
 
         private int generateTrainingData()
         {
-            return FileUtilities.pythonGenTrainingSet(FileUtilities.RELATIVE_PATH + "PythonScripts//GenerateTrainingSet.py");
+            return FileUtilities.pythonGenTrainingSet(FileUtilities.RELATIVE_PATH + "PythonScripts//AutomatedCovarianceScript.py");
         }
 
         private void response(int val)
@@ -36,7 +37,7 @@ namespace ParkinsonsKinectApplication
             if (val == 0)
             {
                 MessageBox.Show("New training set created");
-                ((MainWindow)Application.Current.MainWindow).txtOutToUser.Text += "New training set created";
+                ((MainWindow)Application.Current.MainWindow).txtOutToUser.Text += "New training set created.";
                 busyIndicator.IsBusy = false;
             }
             if (val == -1)
@@ -49,12 +50,14 @@ namespace ParkinsonsKinectApplication
 
         private void btnTrain_Click(object sender, RoutedEventArgs e)
         {
+ 
             int val = -2;
             busyIndicator.IsBusy = true;
             var worker = new BackgroundWorker();
             worker.DoWork += (s, ev) => val = generateTrainingData();
             worker.RunWorkerCompleted += (s, ev) => response(val);
             worker.RunWorkerAsync();
+
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)

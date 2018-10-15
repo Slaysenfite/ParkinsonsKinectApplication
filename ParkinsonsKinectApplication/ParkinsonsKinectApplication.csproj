@@ -252,8 +252,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="PythonScripts\AutomatedCovarianceScript.py" />
     <Content Include="PythonScripts\GenerateTrainingSet.py" />
-    <Content Include="PythonScripts\SkeletonJointDataProcessing.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SkeletonJointFiles\" />

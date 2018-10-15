@@ -71,7 +71,9 @@ namespace ParkinsonsKinectApplication.Utilities
             pyProc.Start();
 
             StreamReader pyProcReader = pyProc.StandardOutput;
-            if (pyProcReader.ReadLine().Contains("DONE"))
+            String returned = pyProcReader.ReadLine();
+            Console.WriteLine(returned);
+            if (returned.Contains("DONE"))
                 return 0;
             else return -1;
         }
