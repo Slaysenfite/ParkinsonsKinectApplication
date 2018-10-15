@@ -22,7 +22,8 @@ namespace ParkinsonsKinectApplication.Utilities
             List<String> ret = new List<String>();
             ret.Add("Front view gait sequence");
             ret.Add("Back view gait sequence");
-            ret.Add("Side view gait sequence");
+            ret.Add("Side view, left facing gait sequence");
+            ret.Add("Side view, right facing gait sequence");
             return ret;
         }
     }

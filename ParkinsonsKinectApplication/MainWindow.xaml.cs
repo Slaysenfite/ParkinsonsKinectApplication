@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Linq;
 using Microsoft.Kinect;
 using System.Windows;
-using ParkinsonsKinectApplication.Algorithms;
 using ParkinsonsKinectApplication.KinectModule;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -36,7 +35,6 @@ namespace ParkinsonsKinectApplication
         private String currentFilename;
         private BackgroundWorker myWorker;
         private Skeleton[] skeletons;
-        private Stopwatch stopWatch;
         private Experiment experiment;
 
 
@@ -190,22 +188,19 @@ namespace ParkinsonsKinectApplication
             int trackedSkeleton = skeleton.Joints.Where(item => item.TrackingState == JointTrackingState.Tracked).Count();
             progressBar1.Value = trackedSkeleton;
 
-            if (isCapturingJointData) {
+            if (isCapturingJointData)
                 captureJointData(skeleton);
-            }
+
             DrawDefaultSkeleton();
         }
 
         private void captureJointData(Skeleton skeleton)
         {
-            stopWatch.Stop();
-            String jointData = stopWatch.ElapsedMilliseconds + ",";
-            stopWatch.Start();
+            String jointData = "";
             if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
             {
                 foreach (Joint joint in skeleton.Joints)
                 {
-                    //jointData += joint.JointType.ToString() + ":" + joint.Position.X + "," + joint.Position.Y + "," + joint.Position.Z + "  ";
                     jointData += joint.Position.X + "," + joint.Position.Y + "," + joint.Position.Z + ",";
                 }
                 try
@@ -398,7 +393,6 @@ namespace ParkinsonsKinectApplication
                 txtSubjectName.IsEnabled = false;
 
                 myWorker.RunWorkerAsync(skeletons);//Call the background worker
-                stopWatch = new Stopwatch();
             }
             else
             {
@@ -408,8 +402,6 @@ namespace ParkinsonsKinectApplication
 
         private void btnCaptureStop_Click(object sender, RoutedEventArgs e)
         {
-            stopWatch.Stop();
-            stopWatch.Reset();
             isCapturingJointData = false;
             myWorker.CancelAsync();
 
@@ -432,7 +424,8 @@ namespace ParkinsonsKinectApplication
 
         private void btnGenerateReport_Click(object sender, RoutedEventArgs e)
         {
-
+            ReportWindow win2 = new ReportWindow();
+            win2.Show();
         }
     }
 }

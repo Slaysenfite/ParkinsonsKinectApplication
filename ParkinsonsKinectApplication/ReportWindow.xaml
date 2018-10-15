@@ -1,0 +1,18 @@
+﻿<Window x:Class="ParkinsonsKinectApplication.ReportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ParkinsonsKinectApplication"
+        xmlns:extToolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="ReportWindow" Height="157.334" Width="247">
+    <extToolkit:BusyIndicator Name="busyIndicator" IsBusy="False" Margin="0,0,0.333,8">
+        <ListBox Margin="10,10,3.333,0">
+            <Button x:Name="btnTrain" Content="Generate New  Training Set" Click="btnTrain_Click" Width="204"/>
+            <Button Content="Classify User" Width="204" Click="btnClassify_Click" />
+            <Button Content="Classifier Report" Width="204"/>
+            <Button x:Name="btnClose" Content="Close Window" Click="btnClose_Click" VerticalAlignment="Top" Width="204"/>
+        </ListBox>
+    </extToolkit:BusyIndicator>
+</Window>

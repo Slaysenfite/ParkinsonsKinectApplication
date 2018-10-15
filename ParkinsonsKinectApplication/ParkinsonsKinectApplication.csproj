@@ -60,6 +60,7 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -70,17 +71,39 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Algorithms\AlgorithmUtilities\IndexAndDistance.cs" />
-    <Compile Include="Attributes\Iris.cs" />
+    <Compile Include="MathUtilities\Position_3D.cs" />
+    <Compile Include="ReportWindow.xaml.cs">
+      <DependentUpon>ReportWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\Experiment.cs" />
     <Compile Include="Utilities\FileUtilities.cs" />
     <Compile Include="Utilities\UIUtilities.cs" />
@@ -88,12 +111,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Algorithms\KNearestNeighbour.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MathUtilities\Position_3D.cs" />
     <Compile Include="KinectModule\SkeletonInfo.cs" />
     <Compile Include="KinectModule\KinectHandler.cs" />
     <Compile Include="Attributes\SkeletonJointData.cs" />
@@ -101,10 +122,13 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ReportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWindowViewModel.cs" />
-    <Compile Include="MathUtilities\CovarianceMatrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -122,6 +146,90 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID001-backv-636745912394485764.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID001-frontv-636745912297868841.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID001-leftv-636745912601359504.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID001-rightv-636745912517452301.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID002-backv-636745916414332215.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID002-frontv-636745915985521368.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID002-leftv-636745916565443317.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID002-rightv-636745916491776135.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID003-backv-636745917769603322.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID003-frontv-636745916755854558.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID003-leftv-636745917967137301.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID003-rightv-636745917845086868.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID004-backv-636745918866116845.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID004-frontv-636745918639869620.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID004-leftv-636745919630123038.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID004-rightv-636745919432778929.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID005-backv-636745921066305326.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID005-frontv-636745920936891869.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID005-leftv-636745921237619704.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID005-rightv-636745921152405122.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID006-frontv-636745921558424937.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID006-leftv-636745922189379008.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID006-rightv-636745922012501840.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID007-backv-636745924476202259.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID007-frontv-636745922617936149.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID007-leftv-636745924965609725.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID007-rightv-636745924613323622.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID008-backv-636745925617845644.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID008-frontv-636745925423531930.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID008-leftv-636745925823606502.csv" />
+    <None Include="ParkinsonsDetectionDataset\CONTROL\ID008-rightv-636745925737766014.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\113_OFF_back.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\113_OFF_front.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\113_OFF_LHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\113_OFF_RHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\118_OFF_back.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\118_OFF_front.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\118_OFF_LHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\118_OFF_RHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\162_OFF_back.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\162_OFF_front.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\162_OFF_LHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\162_OFF_RHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\176_OFF_back.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\176_OFF_front.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\176_OFF_LHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\176_OFF_RHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\183_OFF_back.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\183_OFF_front.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\183_OFF_LHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\183_OFF_RHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\215_OFF_back.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\215_OFF_front.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\215_OFF_LHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_OFF\215_OFF_RHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\113_ON_back.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\113_ON_front.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\113_ON_LHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\113_ON_RHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\118_ON_back.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\118_ON_front.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\118_ON_LHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\118_ON_RHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\162_ON_back.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\162_ON_front.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\162_ON_LHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\162_ON_RHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\164_ON_back.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\164_ON_front.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\164_ON_LHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\164_ON_RHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\176_ON_back.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\176_ON_front.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\176_ON_LHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\176_ON_RHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\183_ON_back.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\183_ON_front.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\183_ON_LHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\183_ON_RHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\215_ON_back.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\215_ON_front.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\215_ON_LHS.csv" />
+    <None Include="ParkinsonsDetectionDataset\PD_ON\215_ON_RHS.csv" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -144,13 +252,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Datasets\irisdataset.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="PythonScripts\SkeletonJointDataProcessing.py" />
+    <Content Include="PythonScripts\AutomatedCovarianceScript.py" />
+    <Content Include="PythonScripts\GenerateTrainingSet.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SkeletonJointFiles\" />
+    <Folder Include="TrainingData\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
