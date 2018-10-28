@@ -77,5 +77,21 @@ namespace ParkinsonsKinectApplication.Utilities
                 return 0;
             else return -1;
         }
+
+        public static int pythonClassifyUser(String pyScript, String userID)
+        {
+            ProcessStartInfo pyProcInfo = new ProcessStartInfo(PYTHON_INTERPRETER_LOCATION);
+            pyProcInfo.CreateNoWindow = true;
+            pyProcInfo.UseShellExecute = false;
+            pyProcInfo.RedirectStandardOutput = true;
+            pyProcInfo.Arguments = pyScript + " " + userID;
+            Process pyProc = new Process();
+            pyProc.StartInfo = pyProcInfo;
+            pyProc.Start();
+
+            StreamReader pyProcReader = pyProc.StandardOutput;
+            String returned = pyProcReader.ReadLine();
+            return Convert.ToInt32(returned);
+        }
     }
 }

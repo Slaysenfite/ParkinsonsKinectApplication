@@ -155,10 +155,6 @@
     <None Include="ParkinsonsDetectionDataset\CONTROL\ID002-frontv-636745915985521368.csv" />
     <None Include="ParkinsonsDetectionDataset\CONTROL\ID002-leftv-636745916565443317.csv" />
     <None Include="ParkinsonsDetectionDataset\CONTROL\ID002-rightv-636745916491776135.csv" />
-    <None Include="ParkinsonsDetectionDataset\CONTROL\ID003-backv-636745917769603322.csv" />
-    <None Include="ParkinsonsDetectionDataset\CONTROL\ID003-frontv-636745916755854558.csv" />
-    <None Include="ParkinsonsDetectionDataset\CONTROL\ID003-leftv-636745917967137301.csv" />
-    <None Include="ParkinsonsDetectionDataset\CONTROL\ID003-rightv-636745917845086868.csv" />
     <None Include="ParkinsonsDetectionDataset\CONTROL\ID004-backv-636745918866116845.csv" />
     <None Include="ParkinsonsDetectionDataset\CONTROL\ID004-frontv-636745918639869620.csv" />
     <None Include="ParkinsonsDetectionDataset\CONTROL\ID004-leftv-636745919630123038.csv" />
@@ -235,6 +231,18 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Temp\ID007_temp_acc_back.csv" />
+    <None Include="Temp\ID007_temp_acc_front.csv" />
+    <None Include="Temp\ID007_temp_acc_left.csv" />
+    <None Include="Temp\ID007_temp_acc_right.csv" />
+    <None Include="Temp\ID007_temp_position_back.csv" />
+    <None Include="Temp\ID007_temp_position_front.csv" />
+    <None Include="Temp\ID007_temp_position_left.csv" />
+    <None Include="Temp\ID007_temp_position_right.csv" />
+    <None Include="Temp\ID007_temp_velocity_back.csv" />
+    <None Include="Temp\ID007_temp_velocity_front.csv" />
+    <None Include="Temp\ID007_temp_velocity_left.csv" />
+    <None Include="Temp\ID007_temp_velocity_right.csv" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

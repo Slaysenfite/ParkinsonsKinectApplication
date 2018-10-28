@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,9 +23,15 @@ namespace ParkinsonsKinectApplication
     /// </summary>
     public partial class ReportWindow : Window
     {
+        String[] labels; 
+
         public ReportWindow()
         {
             InitializeComponent();
+            labels = new String[3];
+            labels[0] = "None";
+            labels[1] = "Regular";
+            labels[2] = "Severe";
         }
 
         private int generateTrainingData()
@@ -50,7 +57,6 @@ namespace ParkinsonsKinectApplication
 
         private void btnTrain_Click(object sender, RoutedEventArgs e)
         {
- 
             int val = -2;
             busyIndicator.IsBusy = true;
             var worker = new BackgroundWorker();
@@ -67,7 +73,32 @@ namespace ParkinsonsKinectApplication
 
         private void btnClassify_Click(object sender, RoutedEventArgs e)
         {
-            String userID = ((MainWindow)Application.Current.MainWindow).txtSubjectName.Text;
+            string userID = ((MainWindow)Application.Current.MainWindow).txtSubjectName.Text;
+            if(userID == "")
+            {
+                MessageBox.Show("Please enter a subject name");
+                return;
+            }
+            var userFiles = Directory.EnumerateFiles(FileUtilities.RELATIVE_PATH + "SkeletonJointFiles//", userID + "*.csv").ToList();
+            if(userFiles.Count == 4)
+            {
+                int classified = FileUtilities.pythonClassifyUser(FileUtilities.RELATIVE_PATH + "PythonScripts//AutomatedCovarianceScript.py", userID);
+                if (classified == 0 || classified == 1 || classified == 2)
+                {
+                    MessageBox.Show("Parkinsons Level of " + userID + ": " + labels[classified]);
+                    ((MainWindow)Application.Current.MainWindow).txtOutToUser.Text += userID + " calssified with Parkinsons level: " + labels[classified];
+                }
+                else
+                {
+                    MessageBox.Show("Unable to classify" + userID);
+                    ((MainWindow)Application.Current.MainWindow).txtOutToUser.Text += "Classification error";
+                }
+            }
+            else
+            {
+                MessageBox.Show("Skeleton files for " + userID + " do not exist");
+                ((MainWindow)Application.Current.MainWindow).txtOutToUser.Text += "Skeleton files for " + userID + " do not exist";
+            }
         }
     }
 }
